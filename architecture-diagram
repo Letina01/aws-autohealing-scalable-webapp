@@ -1,0 +1,41 @@
+                          ┌───────────────────────────────┐
+                          │           Client               │
+                          │        (Browser / User)        │
+                          └───────────────┬───────────────┘
+                                          │
+                                          ▼
+                          ┌────────────────────────────────┐
+                          │   Application Load Balancer    │
+                          │  • Routes HTTP traffic          │
+                          │  • Performs Health Checks       │
+                          └───────────────┬────────────────┘
+                                          │
+                ┌─────────────────────────┼─────────────────────────┐
+                │                         │                         │
+                ▼                         ▼                         ▼
+     ┌──────────────────────┐   ┌──────────────────────┐  (Scales Out Automatically)
+     │      EC2 Instance    │   │      EC2 Instance    │
+     │  NGINX Web Server    │   │  NGINX Web Server    │
+     │ Dynamic Metadata UI  │   │ Dynamic Metadata UI  │
+     └──────────┬───────────┘   └──────────┬───────────┘
+                │                           │
+                └──────────────┬────────────┘
+                               ▼
+                    ┌──────────────────────────┐
+                    │ Auto Scaling Group (ASG) │
+                    │ min=2 • desired=2 • max=5│
+                    │ Auto-Healing Enabled     │
+                    └──────────┬───────────────┘
+                               │
+                               ▼
+              ┌─────────────────────────────────────┐
+              │   CloudWatch Monitoring & Metrics    │
+              │  CPU • ALB Health • Unhealthy Host   │
+              └───────────────────┬──────────────────┘
+                                  │
+                                  ▼
+                    ┌────────────────────────────┐
+                    │         SNS Alerts          │
+                    │ Launch / Terminate / Fail   │
+                    │ Sent to Email Notification  │
+                    └────────────────────────────┘
